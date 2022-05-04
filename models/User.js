@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const thoughtSchema = require('./Thought')
+const Thought = require('./Thought')
 
 const userSchema = new Schema(
     {
@@ -13,14 +13,12 @@ const userSchema = new Schema(
             type: String,
             unique: true,
             required: true,
-            validate: {
-                validator: () => Promise.resolve(false),
-                message: 'Email validation failed'
-              }
+            match: /.+\@.+\..+/,
+            max_length: 50,
         },
-        thoughts: [thoughtSchema],
+        thoughts: {type: Array, ref: 'thought'},
         // this is a workable alternative "friends: {type: Array, ref: 'User'},"
-        friends: [userSchema],
+        friends: {type: Array, ref: 'user'},
     },
     {
         toJSON: {
@@ -33,7 +31,11 @@ const userSchema = new Schema(
 userSchema
     .virtual('friendCount')
     // does this syntax below actually work???
-    .get(() => this.friends.length)
+    .get(() => {
+        if (this.friends) {
+            return this.friends.length
+        }
+    })
 
 const User = model('user', userSchema)
 
