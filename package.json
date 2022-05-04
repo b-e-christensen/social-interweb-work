@@ -23,6 +23,7 @@
   "homepage": "https://github.com/b-e-christensen/social-interweb-work#readme",
   "dependencies": {
     "express": "^4.18.1",
-    "mongoose": "^6.3.2"
+    "mongoose": "^6.3.2",
+    "nodemon": "^2.0.16"
   }
 }

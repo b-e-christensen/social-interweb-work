@@ -59,13 +59,31 @@ module.exports = {
             console.log(err)
             res.status(500).json(err)
         })
-    }
+    },
 
+    // POST to create a reaction stored in a single thought's reactions array field
+    addReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thought_id },
+            { $addToSet: { reactions: req.body.reactionBody, username: req.body.username }})
+            .then((user) => res.json(user))
+            .catch((err) => {
+                console.log(err)
+                res.status(500).json(err)
+            })
+    },
+
+    // DELETE to pull and remove a reaction by the reaction's reactionId value
+    deleteReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thought_id },
+            { $pull: { reactions: req.body.reaction_id}})
+            .then((user) => res.json(user))
+            .catch((err) => {
+                console.log(err)
+                res.status(500).json(err)
+            })
+    }
 
 }
 
-// /api/thoughts/:thoughtId/reactions
-
-// POST to create a reaction stored in a single thought's reactions array field
-
-// DELETE to pull and remove a reaction by the reaction's reactionId value
